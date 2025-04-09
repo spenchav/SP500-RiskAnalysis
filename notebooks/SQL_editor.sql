@@ -13,16 +13,15 @@ CREATE TABLE sql_project.raw_wikipedia_sp500 (
 SELECT *
 FROM raw_alpha_vantage_prices;
 
-
 CREATE TABLE raw_prices (
-  symbol      VARCHAR(10),
-  trade_date  DATE,
-  open_price  DECIMAL(10,4),
-  high_price  DECIMAL(10,4),
-  low_price   DECIMAL(10,4),
-  close_price DECIMAL(10,4),
-  volume      BIGINT,
-  PRIMARY KEY (symbol, trade_date)
+  symbol VARCHAR(10),
+  date DATE,
+  open DECIMAL(10,4),
+  high DECIMAL(10,4),
+  low DECIMAL(10,4),
+  close DECIMAL(10,4),
+  volume BIGINT,
+  PRIMARY KEY (symbol, date)
 );
 
 -- Dimension tables
