@@ -1,3 +1,38 @@
 github_key
 github_key.pub
 .env
+
+# Python virtual environment
+venv/
+env/
+.venv/
+.env/
+ENV/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# dbt specific
+target/
+dbt_packages/
+dbt_modules/
+logs/
+.user.yml
+
+# IDE specific
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+
+# OS specific
+.DS_Store
+Thumbs.db
