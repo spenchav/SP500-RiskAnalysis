@@ -56,3 +56,12 @@ CREATE TABLE fact_price (
   FOREIGN KEY (symbol_id) REFERENCES dim_symbol(symbol_id),
   FOREIGN KEY (date_id)   REFERENCES dim_date(date_id)
 );
+
+SELECT 
+    TABLE_SCHEMA as 'Database',
+    TABLE_NAME as 'Table',
+    COLUMN_NAME as 'Column',
+    DATA_TYPE as 'Data Type'
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_SCHEMA NOT IN ('information_schema', 'mysql', 'performance_schema', 'sys')
+ORDER BY TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION;

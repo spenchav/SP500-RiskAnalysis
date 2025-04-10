@@ -1,0 +1,33 @@
+name: Wikipedia Web Scrape Pipeline
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # Run at midnight on Mondays
+  workflow_dispatch:  # Allow manual triggers
+
+jobs:
+  extract_load:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Run Wikipedia Web Scrape
+      env:
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_NAME: ${{ secrets.DB_NAME }}s
+      run: |
+        python notebooks/Wikipedia_Web_Scrape_Extract_Load.py

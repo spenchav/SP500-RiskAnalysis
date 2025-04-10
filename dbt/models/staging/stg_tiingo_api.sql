@@ -1,18 +1,18 @@
 {{ config(
-    materialized='view'
+    materialized='view',
+    schema='sql_project'
 ) }}
 
 WITH raw AS (
     SELECT 
         symbol,
-        CAST(`date` AS DATE) AS trade_date,
+        date,
         open,
         high,
         low,
         close,
         volume
-    FROM `raw_prices`
-    -- Possibly filter out questionable data or duplicates if your raw table has them
+    FROM sql_project.raw_prices
 )
 
 SELECT *

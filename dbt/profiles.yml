@@ -6,5 +6,6 @@ investment_risk_analysis:
       server: "{{ env_var('DB_HOST') }}"
       user: "{{ env_var('DB_USER') }}"
       password: "{{ env_var('DB_PASSWORD') }}"
-      schema: 'sql_project'
-      port: "{{ env_var('DB_PORT') | int }}" 
+      database: "{{ env_var('DB_NAME') }}"
+      schema: "{{ env_var('DB_NAME') }}"
+      port: "{{ env_var('DB_PORT') | as_number }}"

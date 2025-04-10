@@ -1,18 +1,19 @@
 {{ config(
-    materialized='view'
+    materialized='view',
+    schema='sql_project'
 ) }}
 
 WITH raw AS (
     SELECT 
-        TRIM(UPPER(symbol)) AS symbol,
-        security,
-        gics_sector,
-        gics_sub_industry,
-        headquarters_location,
-        `date_added`,
-        cik,
-        founded
-    FROM `raw_wikipedia_sp500`
+        TRIM(UPPER(Symbol)) AS symbol,
+        Security as security,
+        GICSSector as gics_sector,
+        `GICS Sub-Industry` as gics_sub_industry,
+        `Headquarters Location` as headquarters_location,
+        `Date added` as date_added,
+        CIK as cik,
+        Founded as founded
+    FROM sql_project.raw_wikipedia_sp500
 )
 
 SELECT *
