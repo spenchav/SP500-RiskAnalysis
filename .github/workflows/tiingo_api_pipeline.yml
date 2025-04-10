@@ -1,0 +1,30 @@
+name: Tiingo API Pipeline
+
+on:
+  schedule:
+    - cron: '0 0 * * 1-5'  # Run at midnight on weekdays
+  workflow_dispatch:
+
+jobs:
+  extract_load:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run Tiingo API Extract Load
+      env:
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        TIINGO_KEY: ${{ secrets.TIINGO_KEY }}
+      run: |
+        python notebooks/Tiingo_API_Extract_Load.py
