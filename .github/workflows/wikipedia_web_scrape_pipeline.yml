@@ -10,12 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
+  
+    - name: Show directory contents # Added step
+    run: |
+      pwd
+      ls -la
     
     - name: Install dependencies
       run: |
@@ -28,6 +33,6 @@ jobs:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_PORT: ${{ secrets.DB_PORT }}
-        DB_NAME: ${{ secrets.DB_NAME }}s
+        DB_NAME: ${{ secrets.DB_NAME }}
       run: |
         python notebooks/Wikipedia_Web_Scrape_Extract_Load_Python.py
