@@ -56,7 +56,7 @@ jobs:
       if: failure()
       run: |
         if [ -d "dbt/logs" ]; then
-          echo "DBT Logs content:"
+          echo "DBT Logs content:" 
           cat dbt/logs/*
         else
           echo "No logs directory found"
