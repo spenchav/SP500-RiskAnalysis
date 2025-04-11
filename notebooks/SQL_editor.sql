@@ -65,3 +65,21 @@ SELECT
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_SCHEMA NOT IN ('information_schema', 'mysql', 'performance_schema', 'sys')
 ORDER BY TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION;
+
+
+
+SELECT
+    TABLE_NAME,
+    COLUMN_NAME,
+    COLUMN_TYPE,         -- Data type (e.g., bigint, varchar(255), date, decimal(10,2))
+    IS_NULLABLE,         -- YES or NO
+    COLUMN_KEY,          -- Indicates key type: PRI (Primary), UNI (Unique), MUL (Indexed - often a Foreign Key)
+    COLUMN_DEFAULT,      -- Default value, if any
+    EXTRA                -- Extra info like 'auto_increment'
+FROM
+    information_schema.COLUMNS
+WHERE
+    TABLE_SCHEMA = 'sql_project' -- Replace 'sql_project' if your DB name is different
+ORDER BY
+    TABLE_NAME,          -- Group columns by table
+    ORDINAL_POSITION;    -- Keep columns in their original defined order
