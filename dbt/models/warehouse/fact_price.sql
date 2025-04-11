@@ -25,8 +25,8 @@ WITH price_data AS (
 )
 
 SELECT 
-    CAST(s.symbol_id AS BIGINT) as symbol_id,
-    CAST(d.date_id AS BIGINT) as date_id,
+    s.symbol_id,
+    d.date_id,
     p.open_price,
     p.high_price,
     p.low_price,
