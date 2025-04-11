@@ -30,4 +30,4 @@ jobs:
         DB_PORT: ${{ secrets.DB_PORT }}
         DB_NAME: ${{ secrets.DB_NAME }}s
       run: |
-        python notebooks/Wikipedia_Web_Scrape_Extract_Load.py
+        python notebooks/Wikipedia_Web_Scrape_Extract_Load_Python.py
