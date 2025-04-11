@@ -6,7 +6,6 @@
         "DROP TABLE IF EXISTS {{ this }}"
     ],
     post_hook=[
-        "ALTER TABLE sql_project.fact_price ADD CONSTRAINT fact_price_symbol_fk FOREIGN KEY (symbol_id) REFERENCES sql_project.dim_symbol(symbol_id)",
         "SET FOREIGN_KEY_CHECKS=1"
     ]
 ) }}
@@ -21,7 +20,7 @@ WITH symbol_data AS (
 )
 
 SELECT 
-    ROW_NUMBER() OVER (ORDER BY symbol) as symbol_id,
+    CAST(ROW_NUMBER() OVER (ORDER BY symbol) AS BIGINT) as symbol_id,
     symbol,
     security,
     gics_sector,
