@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: dim_date
+    columns:
+      - name: date_id
+        type: bigint
+        primary_key: true
+      - name: trade_date
+        type: date
+      - name: year
+        type: int
+      - name: quarter
+        type: int
+      - name: month
+        type: int
+      - name: day
+        type: int
+      - name: weekday
+        type: int
+
+  - name: dim_symbol
+    columns:
+      - name: symbol_id
+        type: bigint
+        primary_key: true
+      - name: symbol
+        type: varchar(255)
+      - name: security
+        type: text
+      - name: gics_sector
+        type: text
+      - name: gics_industry
+        type: text
+
+  - name: fact_price
+    columns:
+      - name: symbol_id
+        type: bigint
+      - name: date_id
+        type: bigint
+      - name: open_price
+        type: decimal(10,2)
+      - name: high_price
+        type: decimal(10,2)
+      - name: low_price
+        type: decimal(10,2)
+      - name: close_price
+        type: decimal(10,2)
+      - name: volume
+        type: bigint

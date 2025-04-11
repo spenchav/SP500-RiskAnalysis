@@ -16,7 +16,7 @@ WITH date_spine AS (
 )
 
 SELECT 
-    CAST(ROW_NUMBER() OVER (ORDER BY trade_date) AS UNSIGNED) as date_id,
+    ROW_NUMBER() OVER (ORDER BY trade_date) as date_id,
     trade_date,
     YEAR(trade_date) as year,
     QUARTER(trade_date) as quarter,

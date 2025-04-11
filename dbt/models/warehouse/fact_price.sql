@@ -16,10 +16,10 @@ WITH price_data AS (
     SELECT 
         p.symbol,
         p.date,
-        p.open as open_price,
-        p.high as high_price,
-        p.low as low_price,
-        p.close as close_price,
+        CAST(p.open AS DECIMAL(10,2)) as open_price,
+        CAST(p.high AS DECIMAL(10,2)) as high_price,
+        CAST(p.low AS DECIMAL(10,2)) as low_price,
+        CAST(p.close AS DECIMAL(10,2)) as close_price,
         p.volume
     FROM {{ ref('stg_tiingo_api') }} p
 )

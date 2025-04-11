@@ -20,7 +20,7 @@ WITH symbol_data AS (
 )
 
 SELECT 
-    CAST(ROW_NUMBER() OVER (ORDER BY symbol) AS UNSIGNED) as symbol_id,
+    ROW_NUMBER() OVER (ORDER BY symbol) as symbol_id,
     symbol,
     security,
     gics_sector,
