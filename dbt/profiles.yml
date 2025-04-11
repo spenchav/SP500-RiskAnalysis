@@ -8,4 +8,4 @@ investment_risk_analysis:
       password: "{{ env_var('DB_PASSWORD') }}"
       database: "{{ env_var('DB_NAME') }}"
       schema: "{{ env_var('DB_NAME') }}"
-      port: {{ env_var('DB_PORT') }}
+      port: "{{ env_var('DB_PORT') | as_number }}" 
