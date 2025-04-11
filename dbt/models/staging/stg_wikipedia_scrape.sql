@@ -1,5 +1,6 @@
 {{ config(
-    materialized='view'
+    materialized='view',
+    full_refresh=true
 ) }}
 
 WITH raw AS (

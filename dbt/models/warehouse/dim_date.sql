@@ -1,5 +1,7 @@
 {{ config(
-    materialized='table'
+    materialized='table',
+    full_refresh=true,
+    pre_hook="DROP TABLE IF EXISTS {{ this }}"
 ) }}
 
 WITH date_spine AS (

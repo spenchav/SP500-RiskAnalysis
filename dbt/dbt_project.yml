@@ -10,5 +10,7 @@ models:
     +materialized: view    
     staging:
       +materialized: view
+      +full_refresh: true
     warehouse:
       +materialized: table
+      +full_refresh: true
