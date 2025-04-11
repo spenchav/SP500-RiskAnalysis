@@ -1,51 +1,72 @@
-version: 2
+    version: 2
 
-models:
-  - name: dim_date
-    columns:
-      - name: date_id
-        type: bigint
-        primary_key: true
-      - name: trade_date
-        type: date
-      - name: year
-        type: int
-      - name: quarter
-        type: int
-      - name: month
-        type: int
-      - name: day
-        type: int
-      - name: weekday
-        type: int
+    models:
+      - name: dim_date
+        config:
+          contract:
+            enforced: true 
+        columns:
+          - name: date_id
+            data_type: bigint 
+            constraints:
+              - type: primary_key 
+            description: "Unique surrogate key for the date dimension"
+          - name: trade_date
+            data_type: date
+          - name: year
+            data_type: int 
+          - name: quarter
+            data_type: tinyint 
+          - name: month
+            data_type: tinyint
+          - name: day
+            data_type: tinyint
+          - name: weekday
+            data_type: tinyint
 
-  - name: dim_symbol
-    columns:
-      - name: symbol_id
-        type: bigint
-        primary_key: true
-      - name: symbol
-        type: varchar(255)
-      - name: security
-        type: text
-      - name: gics_sector
-        type: text
-      - name: gics_industry
-        type: text
+      - name: dim_symbol
+        config:
+          contract:
+            enforced: true
+        columns:
+          - name: symbol_id
+            data_type: bigint
+            constraints:
+              - type: primary_key 
+            description: "Unique surrogate key for the symbol dimension"
+          - name: symbol
+            data_type: varchar(255) 
+          - name: security
+            data_type: text
+          - name: gics_sector
+            data_type: text
+          - name: gics_industry
+            data_type: text
 
-  - name: fact_price
-    columns:
-      - name: symbol_id
-        type: bigint
-      - name: date_id
-        type: bigint
-      - name: open_price
-        type: decimal(10,2)
-      - name: high_price
-        type: decimal(10,2)
-      - name: low_price
-        type: decimal(10,2)
-      - name: close_price
-        type: decimal(10,2)
-      - name: volume
-        type: bigint
+      - name: fact_price
+        config:
+          contract:
+            enforced: true
+        columns:
+          - name: symbol_id
+            data_type: bigint
+            constraints: 
+              - type: foreign_key
+                to: ref('dim_symbol')
+                field: symbol_id
+          - name: date_id
+            data_type: bigint
+            constraints:
+              - type: foreign_key
+                to: ref('dim_date')
+                field: date_id
+          - name: open_price
+            data_type: decimal(10,2)
+          - name: high_price
+            data_type: decimal(10,2)
+          - name: low_price
+            data_type: decimal(10,2)
+          - name: close_price
+            data_type: decimal(10,2)
+          - name: volume
+            data_type: bigint
