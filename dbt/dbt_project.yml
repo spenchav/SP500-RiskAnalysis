@@ -6,12 +6,9 @@ profile: 'investment_risk_analysis'
 # Where dbt will look for models
 models:
   investment_risk_analysis:
-    schema: sql_project
     +database: sql_project 
     +materialized: view    
     staging:
       +materialized: view
-      +schema: sql_project
     warehouse:
       +materialized: table
-      +schema: sql_project

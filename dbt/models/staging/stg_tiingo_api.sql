@@ -1,19 +1,14 @@
-{{ config(
-    materialized='view',
-    schema='sql_project'
-) }}
+name: 'investment_risk_analysis'
+version: '1.0.0'
+config-version: 2
+profile: 'investment_risk_analysis'
 
-WITH raw AS (
-    SELECT 
-        symbol,
-        date,
-        open,
-        high,
-        low,
-        close,
-        volume
-    FROM sql_project.raw_prices
-)
-
-SELECT *
-FROM raw
+# Where dbt will look for models
+models:
+  investment_risk_analysis:
+    +database: sql_project 
+    +materialized: view    
+    staging:
+      +materialized: view
+    warehouse:
+      +materialized: table

@@ -1,6 +1,5 @@
 {{ config(
-    materialized='view',
-    schema='sql_project'
+    materialized='view'
 ) }}
 
 WITH raw AS (
