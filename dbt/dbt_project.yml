@@ -3,14 +3,18 @@ version: '1.0.0'
 config-version: 2
 profile: 'investment_risk_analysis'
 
-# Where dbt will look for models
 models:
   investment_risk_analysis:
     +database: sql_project 
-    +materialized: view    
     staging:
       +materialized: view
       +full_refresh: true
     warehouse:
       +materialized: table
       +full_refresh: true
+      dim_date:
+        +tags: ["dimension"]
+      dim_symbol:
+        +tags: ["dimension"]
+      fact_price:
+        +tags: ["fact"]

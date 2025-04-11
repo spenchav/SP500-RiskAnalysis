@@ -1,7 +1,11 @@
 {{ config(
     materialized='table',
     full_refresh=true,
-    pre_hook="DROP TABLE IF EXISTS {{ this }}"
+    pre_hook=[
+        "SET FOREIGN_KEY_CHECKS=0",
+        "DROP TABLE IF EXISTS {{ this }}"
+    ],
+    post_hook="SET FOREIGN_KEY_CHECKS=1"
 ) }}
 
 WITH date_spine AS (
