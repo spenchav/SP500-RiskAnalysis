@@ -8,13 +8,18 @@ on:
 jobs:
   dbt:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.9'  # Specify exact version
+        python-version: '3.9'
+        cache: 'pip'
     
     - name: Install dependencies
       run: |
@@ -38,7 +43,7 @@ jobs:
         DB_USER: ${{ secrets.DB_USER }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_HOST: ${{ secrets.DB_HOST }}
-        DB_PORT: 3306  # Hardcode the port or ensure it's set as a number in GitHub secrets
+        DB_PORT: 3306
         DB_NAME: ${{ secrets.DB_NAME }}
       run: |
         cd dbt
@@ -51,7 +56,8 @@ jobs:
 
     - name: Upload dbt logs if failure
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: dbt-logs
         path: dbt/logs/
+        retention-days: 5
