@@ -8,9 +8,6 @@ on:
 jobs:
   dbt:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
     
     steps:
     - uses: actions/checkout@v3
@@ -54,10 +51,13 @@ jobs:
         echo "Running dbt..."
         dbt run --full-refresh
 
-    - name: Upload dbt logs if failure
+    # Instead of using upload-artifact action, we'll use a direct command to save logs
+    - name: Save logs if failure
       if: failure()
-      uses: actions/upload-artifact@v3
-      with:
-        name: dbt-logs
-        path: dbt/logs/
-        retention-days: 5
+      run: |
+        if [ -d "dbt/logs" ]; then
+          echo "DBT Logs content:"
+          cat dbt/logs/*
+        else
+          echo "No logs directory found"
+        fi
