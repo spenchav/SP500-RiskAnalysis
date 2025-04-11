@@ -1,24 +1,7 @@
 {{ config(
     materialized='table',
-    full_refresh=true,
-    pre_hook=[
-        "SET FOREIGN_KEY_CHECKS=0",
-        "DROP TABLE IF EXISTS {{ this }}"
-    ]
+    full_refresh=true
 ) }}
-
-{% set create_table_sql %}
-CREATE TABLE {{ this }} (
-    symbol_id BIGINT PRIMARY KEY,
-    symbol VARCHAR(255),
-    security TEXT,
-    gics_sector TEXT,
-    gics_industry TEXT
-)
-{% endset %}
-
-{{ create_table_sql }}
-;
 
 WITH symbol_data AS (
     SELECT DISTINCT
@@ -29,11 +12,10 @@ WITH symbol_data AS (
     FROM {{ ref('stg_wikipedia_scrape') }}
 )
 
-INSERT INTO {{ this }}
 SELECT 
-    ROW_NUMBER() OVER (ORDER BY symbol) as symbol_id,
-    symbol,
-    security,
-    gics_sector,
-    gics_industry
+    CAST(ROW_NUMBER() OVER (ORDER BY symbol) AS UNSIGNED) as symbol_id,
+    CAST(symbol AS CHAR(255)) as symbol,
+    CAST(security AS TEXT) as security,
+    CAST(gics_sector AS TEXT) as gics_sector,
+    CAST(gics_industry AS TEXT) as gics_industry
 FROM symbol_data
