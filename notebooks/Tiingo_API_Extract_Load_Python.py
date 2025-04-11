@@ -61,11 +61,11 @@ print(f"New tickers to process in this batch: {len(tickers_to_process)}")
 print("Tickers in current batch:", tickers_to_process)
 
 
-
 def get_eod_prices(symbol, start="2019-01-01", end=None, resample_freq="daily"):
     """
     Fetch historical EOD price data for a given symbol from the Tiingo API.
-    Returns a DataFrame with columns: date, open, high, low, close, volume, symbol.
+    Returns a DataFrame with columns: date, open, high, low, close, volume, 
+    adj_open, adj_high, adj_low, adj_close, adj_volume, div_cash, split_factor, symbol.
     """
     TIINGO_KEY = os.getenv('TIINGO_KEY')
     if not TIINGO_KEY:
@@ -89,17 +89,55 @@ def get_eod_prices(symbol, start="2019-01-01", end=None, resample_freq="daily"):
     data = response.json()
     if not data:
         raise Exception(f"No data returned from Tiingo for symbol: {symbol}")
+    
     df = pd.DataFrame(data)
-    columns_to_keep = ['date', 'open', 'high', 'low', 'close', 'volume']
+    
+    # Define all columns we want to keep, including adjusted prices
+    columns_to_keep = [
+        'date', 
+        'open', 'high', 'low', 'close', 'volume',
+        'adjOpen', 'adjHigh', 'adjLow', 'adjClose', 'adjVolume',
+        'divCash', 'splitFactor'
+    ]
+    
+    # Keep only columns that exist in the response
     df = df[[col for col in columns_to_keep if col in df.columns]]
+    
+    # Rename columns to match our database schema
+    column_mapping = {
+        'adjOpen': 'adj_open',
+        'adjHigh': 'adj_high',
+        'adjLow': 'adj_low',
+        'adjClose': 'adj_close',
+        'adjVolume': 'adj_volume',
+        'divCash': 'div_cash',
+        'splitFactor': 'split_factor'
+    }
+    df = df.rename(columns=column_mapping)
+    
+    # Convert date to datetime
     df['date'] = pd.to_datetime(df['date'])
-    for col in ['open', 'high', 'low', 'close']:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
-    if 'volume' in df.columns:
-        df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
-    # Store the original symbol in the dataframe (not the Tiingo-formatted one)
+    
+    # Convert numeric columns
+    price_columns = ['open', 'high', 'low', 'close', 
+                    'adj_open', 'adj_high', 'adj_low', 'adj_close',
+                    'div_cash', 'split_factor']
+    for col in price_columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+    
+    # Convert volume columns
+    volume_columns = ['volume', 'adj_volume']
+    for col in volume_columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+    
+    # Add symbol column
     df['symbol'] = symbol
+    
+    # Sort by date and reset index
     df = df.sort_values('date').reset_index(drop=True)
+    
     return df
 
 

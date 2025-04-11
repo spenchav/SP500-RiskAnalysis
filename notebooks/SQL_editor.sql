@@ -9,10 +9,8 @@ CREATE TABLE sql_project.raw_wikipedia_sp500 (
     cik            VARCHAR(10)
 );
 
-
-SELECT *
-FROM raw_alpha_vantage_prices;
-
+-- Drop and recreate raw_prices table with adjusted columns
+DROP TABLE IF EXISTS raw_prices;
 CREATE TABLE raw_prices (
   symbol VARCHAR(10),
   date DATE,
@@ -21,6 +19,13 @@ CREATE TABLE raw_prices (
   low DECIMAL(10,4),
   close DECIMAL(10,4),
   volume BIGINT,
+  adj_open DECIMAL(10,4),
+  adj_high DECIMAL(10,4),
+  adj_low DECIMAL(10,4),
+  adj_close DECIMAL(10,4),
+  adj_volume BIGINT,
+  div_cash DECIMAL(10,4),
+  split_factor DECIMAL(10,4),
   PRIMARY KEY (symbol, date)
 );
 
