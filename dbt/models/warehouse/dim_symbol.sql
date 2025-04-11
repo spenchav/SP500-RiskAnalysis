@@ -4,11 +4,21 @@
     pre_hook=[
         "SET FOREIGN_KEY_CHECKS=0",
         "DROP TABLE IF EXISTS {{ this }}"
-    ],
-    post_hook=[
-        "SET FOREIGN_KEY_CHECKS=1"
     ]
 ) }}
+
+{% set create_table_sql %}
+CREATE TABLE {{ this }} (
+    symbol_id BIGINT PRIMARY KEY,
+    symbol VARCHAR(255),
+    security TEXT,
+    gics_sector TEXT,
+    gics_industry TEXT
+)
+{% endset %}
+
+{{ create_table_sql }}
+;
 
 WITH symbol_data AS (
     SELECT DISTINCT
@@ -19,6 +29,7 @@ WITH symbol_data AS (
     FROM {{ ref('stg_wikipedia_scrape') }}
 )
 
+INSERT INTO {{ this }}
 SELECT 
     ROW_NUMBER() OVER (ORDER BY symbol) as symbol_id,
     symbol,

@@ -4,13 +4,26 @@
     pre_hook=[
         "SET FOREIGN_KEY_CHECKS=0",
         "DROP TABLE IF EXISTS {{ this }}"
-    ],
-    post_hook=[
-        "ALTER TABLE {{ this }} ADD CONSTRAINT fact_price_symbol_fk FOREIGN KEY (symbol_id) REFERENCES {{ ref('dim_symbol') }}(symbol_id)",
-        "ALTER TABLE {{ this }} ADD CONSTRAINT fact_price_date_fk FOREIGN KEY (date_id) REFERENCES {{ ref('dim_date') }}(date_id)",
-        "SET FOREIGN_KEY_CHECKS=1"
     ]
 ) }}
+
+{% set create_table_sql %}
+CREATE TABLE {{ this }} (
+    symbol_id BIGINT,
+    date_id BIGINT,
+    open_price DECIMAL(10,2),
+    high_price DECIMAL(10,2),
+    low_price DECIMAL(10,2),
+    close_price DECIMAL(10,2),
+    volume BIGINT,
+    PRIMARY KEY (symbol_id, date_id),
+    CONSTRAINT fact_price_symbol_fk FOREIGN KEY (symbol_id) REFERENCES {{ ref('dim_symbol') }}(symbol_id),
+    CONSTRAINT fact_price_date_fk FOREIGN KEY (date_id) REFERENCES {{ ref('dim_date') }}(date_id)
+)
+{% endset %}
+
+{{ create_table_sql }}
+;
 
 WITH price_data AS (
     SELECT 
@@ -24,6 +37,7 @@ WITH price_data AS (
     FROM {{ ref('stg_tiingo_api') }} p
 )
 
+INSERT INTO {{ this }}
 SELECT 
     s.symbol_id,
     d.date_id,
