@@ -18,7 +18,7 @@ jobs:
         python-version: '3.x'
   
     - name: Show directory contents # Added step
-    run: |
+    run:
       pwd
       ls -la
     
