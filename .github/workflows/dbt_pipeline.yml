@@ -10,22 +10,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
-    - name: Install dbt
+        python-version: '3.9'  # Specify exact version
+    
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install dbt-mysql
+        pip install dbt-core
+    
+    - name: Debug Environment
+      run: |
+        echo "Python version:"
+        python --version
+        echo "dbt version:"
+        dbt --version
+        echo "Current directory:"
+        pwd
+        echo "Directory contents:"
+        ls -la
+    
     - name: Run dbt
       env:
         DB_USER: ${{ secrets.DB_USER }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_HOST: ${{ secrets.DB_HOST }}
-        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_PORT: 3306  # Hardcode the port or ensure it's set as a number in GitHub secrets
         DB_NAME: ${{ secrets.DB_NAME }}
       run: |
         cd dbt
+        echo "Running dbt debug..."
+        dbt debug --config-dir
+        echo "Installing dbt dependencies..."
         dbt deps
-        dbt run
+        echo "Running dbt..."
+        dbt run --full-refresh
+
+    - name: Upload dbt logs if failure
+      if: failure()
+      uses: actions/upload-artifact@v2
+      with:
+        name: dbt-logs
+        path: dbt/logs/
