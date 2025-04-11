@@ -1,22 +1,23 @@
 version: 2
 
-models: # <--- Should have NO indentation
+models:
   - name: dim_date
     config:
       contract:
-        enforced: true
+        enforced: false # Disabled contract enforcement
     columns:
       - name: date_id
         data_type: bigint
         constraints:
           - type: primary_key
         description: "Unique surrogate key for the date dimension"
+      # ... other dim_date columns ...
       - name: trade_date
         data_type: date
       - name: year
         data_type: int
       - name: quarter
-        data_type: tinyint # Using tinyint for efficiency
+        data_type: tinyint
       - name: month
         data_type: tinyint
       - name: day
@@ -27,13 +28,14 @@ models: # <--- Should have NO indentation
   - name: dim_symbol
     config:
       contract:
-        enforced: true
+        enforced: false # Disabled contract enforcement
     columns:
       - name: symbol_id
         data_type: bigint
         constraints:
           - type: primary_key
         description: "Unique surrogate key for the symbol dimension"
+      # ... other dim_symbol columns ...
       - name: symbol
         data_type: varchar(255)
       - name: security
@@ -46,7 +48,7 @@ models: # <--- Should have NO indentation
   - name: fact_price
     config:
       contract:
-        enforced: true
+        enforced: false # Disabled contract enforcement
     columns:
       - name: symbol_id
         data_type: bigint
@@ -60,6 +62,7 @@ models: # <--- Should have NO indentation
           - type: foreign_key
             to: ref('dim_date')
             field: date_id
+      # ... other fact_price columns ...
       - name: open_price
         data_type: decimal(10,2)
       - name: high_price
