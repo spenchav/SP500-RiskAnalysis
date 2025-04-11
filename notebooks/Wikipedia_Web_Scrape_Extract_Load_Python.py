@@ -63,7 +63,7 @@ else:
 
 
 
-    rows = []
+rows = []
 for tr in data_rows:
     # Get all cell values from the row (using <td> elements)
     cells = tr.find_all("td")
