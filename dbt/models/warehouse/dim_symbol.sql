@@ -1,6 +1,8 @@
 {{ config(
     materialized='table',
-    full_refresh=true
+    full_refresh=true,
+    pre_hook="SET FOREIGN_KEY_CHECKS=0;",
+    post_hook="SET FOREIGN_KEY_CHECKS=1;"
 ) }}
 
 WITH symbol_data AS (
@@ -14,8 +16,8 @@ WITH symbol_data AS (
 
 SELECT 
     CAST(ROW_NUMBER() OVER (ORDER BY symbol) AS UNSIGNED) as symbol_id,
-    CAST(symbol AS CHAR(255)) as symbol,
-    CAST(security AS TEXT) as security,
-    CAST(gics_sector AS TEXT) as gics_sector,
-    CAST(gics_industry AS TEXT) as gics_industry
+    symbol,
+    security,
+    gics_sector,
+    gics_industry
 FROM symbol_data

@@ -1,6 +1,12 @@
 {{ config(
     materialized='table',
-    full_refresh=true
+    full_refresh=true,
+    pre_hook="SET FOREIGN_KEY_CHECKS=0;",
+    post_hook=[
+        "ALTER TABLE {{ this }} ADD CONSTRAINT fact_price_symbol_fk FOREIGN KEY (symbol_id) REFERENCES {{ ref('dim_symbol') }}(symbol_id);",
+        "ALTER TABLE {{ this }} ADD CONSTRAINT fact_price_date_fk FOREIGN KEY (date_id) REFERENCES {{ ref('dim_date') }}(date_id);",
+        "SET FOREIGN_KEY_CHECKS=1;"
+    ]
 ) }}
 
 WITH price_data AS (

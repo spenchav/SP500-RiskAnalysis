@@ -1,6 +1,8 @@
 {{ config(
     materialized='table',
-    full_refresh=true
+    full_refresh=true,
+    pre_hook="SET FOREIGN_KEY_CHECKS=0;",
+    post_hook="SET FOREIGN_KEY_CHECKS=1;"
 ) }}
 
 WITH date_spine AS (
