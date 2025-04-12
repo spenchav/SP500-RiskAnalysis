@@ -61,7 +61,7 @@ print(f"New tickers to process in this batch: {len(tickers_to_process)}")
 print("Tickers in current batch:", tickers_to_process)
 
 
-def get_eod_prices(symbol, start="2019-01-01", end=None, resample_freq="daily"):
+def get_eod_prices(symbol, start="2005-01-01", end=None, resample_freq="daily"):
     """
     Fetch historical EOD price data for a given symbol from the Tiingo API.
     Returns a DataFrame with columns: date, open, high, low, close, volume, 
